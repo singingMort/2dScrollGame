@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace Ruccho
@@ -10,6 +10,7 @@ namespace Ruccho
         Vector2 currentPos;
         Vector2 targetPos;
         Vector2 velocity = Vector2.zero;
+
         Rigidbody2D rigidBody2DRef;
 
         // Use this for initialization
@@ -43,14 +44,18 @@ namespace Ruccho
 
         private void UpdateTarget()
         {
-            int x = 0;
-            int y = 0;
+            float x = 0;
+            float y = 0;
             x += Input.GetKey(KeyCode.RightArrow) ? 1 : 0;
             x += Input.GetKey(KeyCode.LeftArrow) ? -1 : 0;
             y += Input.GetKey(KeyCode.UpArrow) ? 1 : 0;
             y += Input.GetKey(KeyCode.DownArrow) ? -1 : 0;
 
-            currentPos = new Vector2(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y) + 0.5f);
+            y += Input.GetKey(KeyCode.Space) ? 1 : 0;
+
+            y += -0.1f;
+
+            currentPos = new Vector2(transform.position.x, transform.position.y);
             targetPos = currentPos + new Vector2(x, y);
             WalkableTestX = Physics2D.Raycast(currentPos, new Vector2(x, 0), 1.0f);
             if (WalkableTestX)
@@ -63,6 +68,7 @@ namespace Ruccho
             WalkableTestY = Physics2D.Raycast(currentPos, new Vector2(0, y), 1.0f);
             if (WalkableTestY)
             {
+                Debug.Log(WalkableTestY.point.y - currentPos.y);
                 if (Mathf.Abs(WalkableTestY.point.y - currentPos.y) > 0.25f)
                 {
                     y = 0;
